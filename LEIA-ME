@@ -1,0 +1,20 @@
+
+
+Primeiro esboço de uma biblioteca gráfica bidimensional para estudos.
+
+Para executar os exemplos, deve-se ter a biblioteca X-Window instalada.
+
+O código foi escrito para ser compilado em uma distribuição Linux (64 bits), mas também funciona em sitemas da Apple. Quem tiver um Mac me informe que passo as diretrizes para a compilação nessas máquinas. Caso alguém tenha uma distribuição 32 bits e tiver problemas com a geração do executável, me informe também.
+
+Nesse momento, está sendo disponibilizado o código objeto bibaux.o, que esconde, de forma proposital, parte da biblioteca.
+
+Para compilar e estudar os exemplos, execute (em um Shell):
+
+gcc -c bibaux.c (este comando não é necessário agora pois já está sendo disponibilizado o bibaux.o)
+gcc -c cg2d.c
+gcc exemplo1.c -o exemplo1 cg2d.o bibaux.o -lm -lX11
+./exemplo1
+
+Estudem ambos os exemplos apresentados!
+
+
