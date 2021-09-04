@@ -1,5 +1,9 @@
 # mesadigitalizadora-cg
-
-```execute chmod +777 ./script.sh para dar permissão de execução e ./script.sh para rodar
-
+execute para dar permissão de execução 
+```
+chmod +777 ./script.sh 
+```
+para rodar
+```
+./script.sh 
 ```
