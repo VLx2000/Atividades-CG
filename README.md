@@ -1,9 +1,11 @@
 # mesadigitalizadora-cg
-execute para dar permissão de execução 
+##### Execute para dar permissão de execução. #####
 ```
 chmod +777 ./script.sh 
 ```
-para rodar
+##### Para rodar. #####
 ```
 ./script.sh 
 ```
+##### Agora mexa o mouse pelo terminal para testar. #####
+###### Clique esquerdo começa rastreamento e ao clicar novamente para. ######
