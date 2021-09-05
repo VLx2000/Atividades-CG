@@ -71,8 +71,8 @@ int main(void)
 				posx += (int)x;
 				posy += (int)y;
 				// exibe as informações
-				printf("x = %d, y = %d, esquerdo = %d\n", posx, posy, esquerdo);
-				//printf("Registrando... Clique com o botão ESQUERDO para PARAR\n");
+				printf("Registrando... Clique com o botão ESQUERDO para PARAR\t");
+				printf("x = %d, y = %d\n", posx, posy);
 				// Insere as coordenadas dos pontos representados no SRU no objeto
 				// O terceiro parâmetro será discutido em aula futura
 				// O quarto parâmetro é o indice associado a lookup table (cor)
