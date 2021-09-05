@@ -12,6 +12,7 @@ int main(void)
 {
 	int fd, bytes, esquerdo, direito, centro, registrar = 0, sair = 0;
 	signed char x = 0, y = 0;
+	int posx = 0, posy = 0;
 	unsigned char data[3];
 	const char *mouse_device = "/dev/input/mice";
 	palette *palheta;
@@ -21,7 +22,7 @@ int main(void)
 	object *curva;
 
 	SetWorld(-128, -128, 127, 127);	  // Define o tamanho do mundo
-	monitor = CreateBuffer(640, 480); // Cria um monitor virtual
+	monitor = CreateBuffer(800, 600); // Cria um monitor virtual
 
 	palheta = CreatePalette(5); // Cria um colormap (lookup table) com 5 cores
 	SetColor(0, 0, 0, palheta);
@@ -65,21 +66,22 @@ int main(void)
 			if (registrar == 1)
 			{
 				// posição relativa do ponteiro
-				x += data[1];
-				y += data[2];
-
+				x = data[1];
+				y = data[2];
+				posx += (int)x;
+				posy += (int)y;
 				// exibe as informações
-				//printf("x = %d, y = %d, esquerdo = %d\n", x, y, esquerdo);
-				printf("Registrando... Clique com o botão ESQUERDO para PARAR\n");
+				printf("x = %d, y = %d, esquerdo = %d\n", posx, posy, esquerdo);
+				//printf("Registrando... Clique com o botão ESQUERDO para PARAR\n");
 				// Insere as coordenadas dos pontos representados no SRU no objeto
 				// O terceiro parâmetro será discutido em aula futura
 				// O quarto parâmetro é o indice associado a lookup table (cor)
-				SetObject(SetPoint(x, y, 1, 1), curva);
+				SetObject(SetPoint(posx, posy, 1, 1), curva);
 			}
 		}
 	}
-	janela = CreateWindow(-128.0, -128.0, 127.0, 127.0); // cria uma janela de visualização (coordenadas no SRU)
-	porta = CreateViewPort(0, 0, 639, 479); // Cria uma viewport
+	janela = CreateWindow(-1000.0, -1000.0, 1000.0, 1000.0); // cria uma janela de visualização (coordenadas no SRU)
+	porta = CreateViewPort(0, 0, 799, 599); // Cria uma viewport
 	// no caso uma única saída para o dispositivo de visualização com 640x480 entradas
 
 	DrawObject(curva, janela, porta, monitor, 1);
