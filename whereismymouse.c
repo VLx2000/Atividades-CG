@@ -5,11 +5,19 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "cg2d.h"
+#include <X11/Xlib.h>
 
 #define TAM 5000
 
 int main(void)
 {
+	/**/
+	Display* disp = XOpenDisplay(NULL);
+	Screen*  scrn = DefaultScreenOfDisplay(disp);
+	int height = scrn->height;
+	int width  = scrn->width;
+	/*extraido de https://pt.stackoverflow.com/questions/117720/obter-resolu%C3%A7%C3%A3o-da-tela-c*/
+	
 	int fd, bytes, esquerdo, direito, centro, registrar = 0, sair = 0;
 	signed char x = 0, y = 0;
 	int posx = 0, posy = 0;
@@ -80,9 +88,9 @@ int main(void)
 			}
 		}
 	}
-	janela = CreateWindow(-1000.0, -1000.0, 1000.0, 1000.0); // cria uma janela de visualização (coordenadas no SRU)
+	janela = CreateWindow(-width, -height, width, height); // cria uma janela de visualização (coordenadas no SRU)
 	porta = CreateViewPort(0, 0, 799, 599); // Cria uma viewport
-	// no caso uma única saída para o dispositivo de visualização com 640x480 entradas
+	// no caso uma única saída para o dispositivo de visualização com 800x600 entradas
 
 	DrawObject(curva, janela, porta, monitor, 1);
 	Dump2X(monitor, palheta);
