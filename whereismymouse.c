@@ -7,7 +7,7 @@
 #include "cg2d.h"
 #include <X11/Xlib.h>
 
-#define TAM 9999
+#define TAM 99999
 
 int main(void)
 {
@@ -18,7 +18,7 @@ int main(void)
 	int width  = scrn->width;
 	/*extraido de https://pt.stackoverflow.com/questions/117720/obter-resolu%C3%A7%C3%A3o-da-tela-c*/
 	
-	int fd, bytes, esquerdo, direito, centro, registrar = 0, sair = 0, cont = 0;
+	int fd, bytes, esquerdo, direito, centro, registrar = 0, sair = 0, cont = 1;
 	signed char x = 0, y = 0;
 	int posx = 0, posy = 0, vx[TAM], vy[TAM];
 	unsigned char data[3];
@@ -39,9 +39,6 @@ int main(void)
 	SetColor(0, 0, 1, palheta);
 	SetColor(1, 1, 1, palheta);
 
-	// cria objeto bidimensional
-	curva = CreateObject(TAM);
-
 	// Abre o mouse
 	if ((fd = open(mouse_device, O_RDWR)) == -1)
 	{
@@ -49,10 +46,13 @@ int main(void)
 		return -1;
 	}
 
+	vx[0] = 0;
+	vy[0] = 0;
+
 	// Fica lendo o mouse
 	while (!sair)
 	{
-		if (cont > TAM/2)
+		if (cont > TAM)
 			return 1;
 		bytes = read(fd, data, sizeof(data));
 		if (bytes > 0)
@@ -85,18 +85,21 @@ int main(void)
 				// exibe as informações
 				printf("Registrando... Clique com o botão ESQUERDO para PARAR\t");
 				printf("x = %d, y = %d\n", posx, posy);
-				// Insere as coordenadas dos pontos representados no SRU no objeto
-				// O terceiro parâmetro será discutido em aula futura
-				// O quarto parâmetro é o indice associado a lookup table (cor)
-				SetObject(SetPoint(posx, posy, 1, 1), curva);
 				cont++;
 			}
 		}
 	}
-	// solucao paliativa para ultimo ponto n se conectar no primeiro
-	for (int i = cont - 1; i >= 0; i--){
+	// cria objeto bidimensional
+	curva = CreateObject(2*cont);
+
+	// Insere as coordenadas dos pontos representados no SRU no objeto
+	for (int i = 0; i < cont; i++)
 		SetObject(SetPoint(vx[i], vy[i], 1, 1), curva);
-	}
+
+	// solucao paliativa para ultimo ponto n se conectar no primeiro
+	for (int i = cont - 2; i >= 0; i--)
+		SetObject(SetPoint(vx[i], vy[i], 1, 1), curva);
+	
 	janela = CreateWindow(-width, -height, width, height); // cria uma janela de visualização (coordenadas no SRU)
 	porta = CreateViewPort(0, 0, 799, 599); // Cria uma viewport
 	// no caso uma única saída para o dispositivo de visualização com 800x600 entradas
