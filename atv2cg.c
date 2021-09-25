@@ -9,18 +9,17 @@
 #include "cg2d.h"
 
 int RasterFill(bufferdevice * dev, viewport* port, int color){
-  int flag = 1;
+  int flag = 0;
   for (int i = 0; i< 640;i++){
     for(int j = 0; j< 480;j++){
-      int pxl = dev->buffer[i*j + j];
+      int pxl = dev->buffer[i*480 + j];
       printf("%d",pxl);
       if(pxl != 0){
         flag = !flag;
       }
       if(flag == 1){
-        dev->buffer[i*j + j] = color;
-        //printf("AAAAA\n");
-        //SetObject(SetPoint(i,j,1,1),aux);
+        dev->buffer[i*480 + j] = color;
+ =
       }
     }
     printf("\n");
@@ -72,8 +71,8 @@ int main(int argc, char ** argv) {
   
   DrawObject(poligono1,janela,porta,monitor,1);
   int i = RasterFill(monitor,porta,1);
-  DrawObject(poligono2,janela,porta,monitor,3);
-  int j = RasterFill(monitor,porta,3);
+  //DrawObject(poligono2,janela,porta,monitor,3);
+  //int j = RasterFill(monitor,porta,3);
   
  
   Dump2X(monitor,palheta);
