@@ -8,6 +8,27 @@
 
 #include "cg2d.h"
 
+int RasterFill(bufferdevice * dev, viewport* port, int color){
+  int flag = 1;
+  for (int i = 0; i< 640;i++){
+    for(int j = 0; j< 480;j++){
+      int pxl = dev->buffer[i*j + j];
+      printf("%d",pxl);
+      if(pxl != 0){
+        flag = !flag;
+      }
+      if(flag == 1){
+        dev->buffer[i*j + j] = color;
+        //printf("AAAAA\n");
+        //SetObject(SetPoint(i,j,1,1),aux);
+      }
+    }
+    printf("\n");
+  }
+  return 1;
+  //
+}
+
 int main(int argc, char ** argv) {
   
   palette * palheta;
@@ -50,8 +71,9 @@ int main(int argc, char ** argv) {
   // no caso uma única saída para o dispositivo de visualização com 640x480 entradas
   
   DrawObject(poligono1,janela,porta,monitor,1);
-
+  int i = RasterFill(monitor,porta,1);
   DrawObject(poligono2,janela,porta,monitor,3);
+  int j = RasterFill(monitor,porta,3);
   
  
   Dump2X(monitor,palheta);
