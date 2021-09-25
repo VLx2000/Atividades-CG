@@ -9,20 +9,18 @@
 #include "cg2d.h"
 
 int RasterFill(bufferdevice * dev, viewport* port, int color){
-  int flag = 0;
-  for (int i = 0; i< 640;i++){
-    for(int j = 0; j< 480;j++){
-      int pxl = dev->buffer[i*480 + j];
-      printf("%d",pxl);
-      if(pxl != 0){
+  for (int i = port->xmin; i< port->xmax;i++){
+    int flag = 0;
+    for(int j = port->ymin; j< port->ymax;j++){
+      int pxl = dev->buffer[i*port->ymax + j];
+      if(pxl == color){
         flag = !flag;
       }
       if(flag == 1){
-        dev->buffer[i*480 + j] = color;
- =
+        dev->buffer[i*port->ymax + j] = color;
       }
     }
-    printf("\n");
+    //printf("\n");
   }
   return 1;
   //
@@ -70,8 +68,8 @@ int main(int argc, char ** argv) {
   // no caso uma única saída para o dispositivo de visualização com 640x480 entradas
   
   DrawObject(poligono1,janela,porta,monitor,1);
-  int i = RasterFill(monitor,porta,1);
   //DrawObject(poligono2,janela,porta,monitor,3);
+  int i = RasterFill(monitor,porta,1);
   //int j = RasterFill(monitor,porta,3);
   
  
