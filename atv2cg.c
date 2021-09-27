@@ -1,10 +1,11 @@
-// Um exemplo utizando as funções da biblioteca implementada
+//Segunda atividade avaliativa de computação Gráfica
+//Lucas Vinícius Domingues RA: 769699
+//Victor Luís Aguilar Antunes RA: 769734
+//Rafael Yoshia Yamawaki Murata RA: 769681
 
-// Para executar:
-// gcc -c bibaux.c
-// gcc -c cg2d.c
-// gcc exemplo1.c -o exemplo1 cg2d.o bibaux.o -lm -lX11
-// ./exemplo1
+//Para a compilar, execute ./script.sh no terminal
+
+//ATENÇÃO: A implementação da função RasterFill se encontra em cg2d.c
 
 #include "cg2d.h"
 
