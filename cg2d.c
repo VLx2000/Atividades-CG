@@ -190,5 +190,58 @@ int DrawObject(object * ob, window * win, viewport * port, bufferdevice * dev, i
   }
 
 
+void RasterFill(bufferdevice *dev, viewport *port, int color)
+{
+	/*printf("%d\n", port->xmax);
+	printf("%d\n", port->xmin);
+	printf("%d\n", port->ymax);
+	printf("%d\n", port->ymin);*/
+	int cont = 0;
+	//printf("%d essa eh a cor", color);
+	for (int y = port->ymax; y >= port->ymin; y--)
+	{
+		int n_pontos_vermelhos = 0;
+		int pos_x[10];
 
+		// Busca por pontos vermelhos
+		for (int x = port->xmin; x <= port->xmax; x++)
+		{
+			int pxl = dev->buffer[cont]; //vendo a cor do pixel
+			//printf("%d", pxl);
+			//printf("%d\t", cont);
+
+			if (pxl == color && y != port->ymax && y != port->ymin && x != port->xmin && x != port->xmax)
+			{
+				pos_x[n_pontos_vermelhos] = cont; // seleciona extremidades do polígono
+
+				if (pos_x[n_pontos_vermelhos] - pos_x[n_pontos_vermelhos - 1] <= 1 && n_pontos_vermelhos - 1 >= 0)
+				{
+					n_pontos_vermelhos--;
+					pos_x[n_pontos_vermelhos] = cont;
+				}
+				n_pontos_vermelhos++;
+			}
+
+			cont++;
+			//printf("%d\n", dentro);
+		}
+
+		// Fim da busca por pontos vermelhos
+
+		if (n_pontos_vermelhos >= 2)
+		{
+			int size = sizeof pos_x / sizeof pos_x[0];
+			int index = 0;
+
+			for (int i = pos_x[index]; i < pos_x[index + 1] && index + 1 <= size; i++)
+			{
+				if (dev->buffer[i] != color)
+				{
+					dev->buffer[i] = color;
+				}
+			}
+		}
+
+	}
+}
 
