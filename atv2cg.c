@@ -1,7 +1,7 @@
 //Segunda atividade avaliativa de computação Gráfica
 //Lucas Vinícius Domingues RA: 769699
 //Victor Luís Aguilar Antunes RA: 769734
-//Rafael Yoshia Yamawaki Murata RA: 769681
+//Rafael Yoshio Yamawaki Murata RA: 769681
 
 //Para a compilar, execute ./script.sh no terminal
 
