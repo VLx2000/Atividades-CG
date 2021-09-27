@@ -8,8 +8,6 @@
 
 #include "cg2d.h"
 
-
-
 int main(int argc, char **argv)
 {
 
