@@ -28,25 +28,29 @@ int main(int argc, char ** argv) {
   SetColor(1,1,1,palheta);
   
   // cria dois objetos bidimensionais
-  poligono1 = CreateObject(5); 
-  poligono2 = CreateObject(5); // polígono fechado com 5 vértices
+  poligono1 = CreateObject(3); 
+  poligono2 = CreateObject(3); // polígono fechado com 5 vértices
   
   // Insere as coordenadas dos pontos representados no SRU em cada objeto
   // O terceiro parâmetro será discutido em aula futura
   // O quarto parâmetro é o indice associado a lookup table (cor)
-  SetObject(SetPoint(-15.0,-12.0,2,1), poligono1);
-  SetObject(SetPoint(-10.0,-5.0,2,1), poligono1);
-  SetObject(SetPoint(-9.0,-7.0,2,1), poligono1);
-  SetObject(SetPoint(-7.0,-10.0,2,1), poligono1);
-  SetObject(SetPoint(-9.0,-11.0,2,1), poligono1);
+  SetObject(SetPoint(-6.0,-5.34,1,1), poligono1);
+  SetObject(SetPoint(-4.67,-2.0,1,1), poligono1);
+  SetObject(SetPoint(-2.67,-2.67,1,1), poligono1);
+  //SetObject(SetPoint(-12.0,-15.0,2,1), poligono1);
+  //SetObject(SetPoint(-14.0,-16.0,2,1), poligono1);
   
-  for(int i = 0;i<5;i++){
+
+
+
+
+  for(int i = 0;i<3;i++){
     float x = poligono1->points[i].x;
     float y = poligono1->points[i].y;
     float new_x = x*sin(45) - y*sin(45);
     printf("%f\n",new_x);
     float new_y = y*cos(45) + x*sin(45);
-    SetObject(SetPoint(new_x,new_y,2,2), poligono2);
+    SetObject(SetPoint(new_x,new_y,1,2), poligono2);
   }
 
   
@@ -59,7 +63,7 @@ int main(int argc, char ** argv) {
   
   DrawObject(poligono1,janela,porta1,monitor,1);
   DrawObject(poligono2,janela,porta2,monitor,2);
- 
+
   Dump2X(monitor,palheta);
  free(poligono1);
  free(poligono2);

@@ -189,25 +189,6 @@ int DrawObject(object * ob, window * win, viewport * port, bufferdevice * dev, i
   return 0;
   }
 
-int RasterFill(bufferdevice * dev, viewport* port, int color){
-  int flag = 1;
-  int pxl;
-  object *aux = CreateObject(100);
-  for (int i = 0; i< 640;i++){
-    for(int j = 0; i< 480;i++){
-      pxl = dev->buffer[i*j + j];
-      printf("%d",pxl);
-      if(pxl == 1){
-        flag =  !flag;
-      }
-      if(flag == 1){
-        //monitor->buffer[i*j + j] = 1;
-        SetObject(SetPoint(i,j,1,1),aux);
-      }
-    }
-    printf("\n");
-  }
-  //DrawObject(aux,janela,porta,monitor,1);
-}
+
 
 
