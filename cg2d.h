@@ -119,5 +119,4 @@ int InWin(point *, window *);
 point * InterX(point *, point *, float);
 point * InterY(point *, point *, float);
 
-int RasterFill(bufferdevice * dev, viewport* port, int color);
 

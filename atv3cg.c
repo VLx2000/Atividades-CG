@@ -39,9 +39,25 @@ int main(int argc, char ** argv) {
   SetObject(SetPoint(-2.67,-2.67,1,1), poligono1);
   //SetObject(SetPoint(-12.0,-15.0,2,1), poligono1);
   //SetObject(SetPoint(-14.0,-16.0,2,1), poligono1);
-  
 
 
+point * multiplicao_matriz(float matriz[3][3], point ponto){
+  float result[3] = {0.0,0.0,0.0};
+  float coord_ponto[] = {ponto.x,ponto.y,ponto.w};
+  for(int i=0;i<3;i++){
+    for(int j = 0;j<3;j++){
+      result[i] += matriz[i][j]*coord_ponto[j];
+    }
+  }
+  point *new_point  = SetPoint(result[0],result[1],result[2],ponto.color);
+  return new_point;
+}
+
+
+void Rotacao(object * poligono){
+  int num_points = poligono->numbers_of_points;
+
+}
 
 
   for(int i = 0;i<3;i++){
