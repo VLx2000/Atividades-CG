@@ -29,7 +29,7 @@ int main(int argc, char ** argv) {
   
   // cria dois objetos bidimensionais
   poligono1 = CreateObject(3); 
-  poligono2 = CreateObject(3); // polígono fechado com 5 vértices
+  //poligono2 = CreateObject(3); // polígono fechado com 5 vértices
   
   // Insere as coordenadas dos pontos representados no SRU em cada objeto
   // O terceiro parâmetro será discutido em aula futura
@@ -54,23 +54,32 @@ point * multiplicao_matriz(float matriz[3][3], point ponto){
 }
 
 
-void Rotacao(object * poligono){
+object * Rotacao(object * poligono, int angulo){
   int num_points = poligono->numbers_of_points;
-
+  object *poligono_rotacionado = CreateObject(num_points);
+  float matriz_rotacao[3][3] ={{cos(angulo),-sin(angulo),0},
+                             {sin(angulo),cos(angulo),0},
+                              {0,0,1}};
+  point *p;
+  for(int i=0;i<num_points;i++){
+    p = multiplicao_matriz(matriz_rotacao,poligono->points[i]);
+    SetObject(p,poligono_rotacionado);
+  }
+  return poligono_rotacionado; 
 }
 
 
-  for(int i = 0;i<3;i++){
-    float x = poligono1->points[i].x;
-    float y = poligono1->points[i].y;
-    float new_x = x*sin(45) - y*sin(45);
-    printf("%f\n",new_x);
-    float new_y = y*cos(45) + x*sin(45);
-    SetObject(SetPoint(new_x,new_y,1,2), poligono2);
-  }
+//for(int i = 0;i<3;i++){
+    //float x = poligono1->points[i].x;
+    //float y = poligono1->points[i].y;
+    //float new_x = x*sin(45) - y*sin(45);
+    //printf("%f\n",new_x);
+    //float new_y = y*cos(45) + x*sin(45);
+    //SetObject(SetPoint(new_x,new_y,1,2), poligono2);
+  //}
 
   
-  
+  poligono2 = Rotacao(poligono1,45);
   janela = CreateWindow(-10.0,-10.0,0.0,0.0); // cria uma janela de visualização (coordenadas no SRU)
  
   porta1 = CreateViewPort(0, 0, 639, 479); // Cria uma viewport
