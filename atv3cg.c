@@ -41,6 +41,7 @@ int main(int argc, char ** argv) {
   //SetObject(SetPoint(-14.0,-16.0,2,1), poligono1);
 
 
+
 point * multiplicao_matriz(float matriz[3][3], point ponto){
   float result[3] = {0.0,0.0,0.0};
   float coord_ponto[] = {ponto.x,ponto.y,ponto.w};
@@ -68,6 +69,20 @@ object * Rotacao(object * poligono, int angulo){
   return poligono_rotacionado; 
 }
 
+object * Desolocamento(object * poligono){
+  int num_points = poligono->numbers_of_points;
+  object *poligono_deslocado = CreateObject(num_points);
+  float inversa[3][3] = {{1, 0, -3},
+						   {0, 1, -1},
+						   {0, 0, 1}};
+  point *p;
+  for(int i=0;i<num_points;i++){
+    p = multiplicao_matriz(inversa,poligono->points[i]);
+    SetObject(p,poligono_deslocado);
+  }
+  return poligono_deslocado; 
+}
+
 
 //for(int i = 0;i<3;i++){
     //float x = poligono1->points[i].x;
@@ -80,6 +95,7 @@ object * Rotacao(object * poligono, int angulo){
 
   
   poligono2 = Rotacao(poligono1,45);
+  poligono2 = Desolocamento(poligono2);
   janela = CreateWindow(-10.0,-10.0,0.0,0.0); // cria uma janela de visualização (coordenadas no SRU)
  
   porta1 = CreateViewPort(0, 0, 639, 479); // Cria uma viewport
