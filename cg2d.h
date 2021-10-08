@@ -21,7 +21,7 @@
    o plano como referência para o mundo */
 
 // Variáveis globais que determinam o tamanho do Universo no SRU
-float XWMin, YWMin, XWMax, YWMax;
+//float XWMin, YWMin, XWMax, YWMax;
 
 // Janela de visualização definida no SRU
 typedef struct Window {
