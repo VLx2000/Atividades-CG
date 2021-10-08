@@ -28,18 +28,20 @@ int main(int argc, char ** argv) {
   SetColor(1,1,1,palheta);
   
   // cria dois objetos bidimensionais
-  poligono1 = CreateObject(3); 
+  poligono1 = CreateObject(5); 
   //poligono2 = CreateObject(3); // polígono fechado com 5 vértices
   
   // Insere as coordenadas dos pontos representados no SRU em cada objeto
   // O terceiro parâmetro será discutido em aula futura
   // O quarto parâmetro é o indice associado a lookup table (cor)
-  SetObject(SetPoint(-6.0,-5.34,1,1), poligono1);
-  SetObject(SetPoint(-4.67,-2.0,1,1), poligono1);
-  SetObject(SetPoint(-2.67,-2.67,1,1), poligono1);
-  //SetObject(SetPoint(-12.0,-15.0,2,1), poligono1);
-  //SetObject(SetPoint(-14.0,-16.0,2,1), poligono1);
-
+  //SetObject(SetPoint(-6.0,-5.34,1,1), poligono1);
+  //SetObject(SetPoint(-4.67,-2.0,1,1), poligono1);
+  //SetObject(SetPoint(-2.67,-2.67,1,1), poligono1);
+  SetObject(SetPoint(-4.5,-4.0,1,1), poligono1);
+  SetObject(SetPoint(-3.5,-1.5,1,1), poligono1);
+  SetObject(SetPoint(-2.0,-2.0,1,1), poligono1);
+  SetObject(SetPoint(-1.5,-3.0,1,1), poligono1);
+  SetObject(SetPoint(-3.0,-4.5,1,1), poligono1);
 
 
 point * multiplicao_matriz(float matriz[3][3], point ponto){
@@ -69,6 +71,47 @@ object * Rotacao(object * poligono, int angulo){
   return poligono_rotacionado; 
 }
 
+float Area(object * poligono){
+  int num_points = poligono->numbers_of_points;
+  float area = 0;
+  int cord;
+  for(int i = 0;i<num_points;i++){
+    if(i+1 == num_points){
+      cord=0;
+    }else{
+      cord=i+1;
+    }
+    area = area + poligono->points[i].x*poligono->points[cord].y - poligono->points[cord].x*poligono->points[i].y;
+  }
+  area = area/2;
+  return area;
+}
+
+float * Centroide(object * poligono){
+  float area = Area(poligono);
+  float * centroides = malloc(sizeof(float)*2);
+  centroides[0] = 0.0;
+  centroides[1] = 0.0;
+  int cord;
+  int num_points = poligono->numbers_of_points;
+  for(int i=0; i<num_points; i++){
+    if(i+1 == num_points){
+      cord=0;
+    }else{
+      cord=i+1;
+    }
+    centroides[0] = centroides[0] + (poligono->points[i].x + poligono->points[cord].x)*(poligono->points[i].x*poligono->points[cord].y 
+                                                                                        - poligono->points[cord].x*poligono->points[i].y);
+    centroides[1] = centroides[1] + (poligono->points[i].y + poligono->points[cord].y)*(poligono->points[i].x*poligono->points[cord].y 
+                                                                                        - poligono->points[cord].x*poligono->points[i].y);
+
+  }
+  centroides[0] = centroides[0]/(6*area);
+  centroides[1] = centroides[1]/(6*area);
+  return centroides;
+}
+
+
 object * Desolocamento(object * poligono){
   int num_points = poligono->numbers_of_points;
   object *poligono_deslocado = CreateObject(num_points);
@@ -83,6 +126,9 @@ object * Desolocamento(object * poligono){
   return poligono_deslocado; 
 }
 
+
+float * teste = Centroide(poligono1);
+printf("%f %f\n", teste[0],teste[1]);
 
 //for(int i = 0;i<3;i++){
     //float x = poligono1->points[i].x;
