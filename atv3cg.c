@@ -6,11 +6,34 @@
 // gcc exemplo1.c -o exemplo1 cg2d.o bibaux.o -lm -lX11
 // ./exemplo1
 
+/*
+	Como comentário no código fonte, descreva qual fenômeno pode ser observado juntamente com a rotação do objeto. 
+	Este efeito é desejável? Descreva uma forma de resolver o problema.
+*/
+/*	
+	R: Ao realizarmos a rotação do objeto, nota-se que ocorre um efeito indesejável de deslocamento do objeto para outro
+	local no espaço. Para resolvermos esse problema, determinamos o centróide do objeto usando a função Centroide() criada.
+	Dessa forma, conseguimos deslocar o centro do objeto original para a origem e aplicar a transformação linear em cada ponto
+	do objeto usando a função multiplicacao_matriz() a fim de obter a rotação de cada ponto e, consequentemente, a rotação do 
+	objeto sem que ocorra um deslocamento indesejável. 
+
+*/
+
 #include "cg2d.h"
 #include <math.h>
 #define TAM 5
+#define PI 3.14159265
 
-point *multiplicao_matriz(float matriz[3][3], point *ponto)
+/*
+	Função auxiliar para a multiplicação de um ponto por uma matriz
+	- Parâmetros:
+		matriz[3][3]: Matriz de multiplicação
+		*ponto: Um ponteiro para um tipo ponto que representa o ponto homogêneo que será usado para calcular sua nova coordenada
+	
+	- Valor de Retorno:
+		new_point: novo ponto homogêneo transladado obtido após a multiplicação
+ */
+point *multiplicacao_matriz(float matriz[3][3], point *ponto)
 {
 	float result[3] = {0.0, 0.0, 0.0};
 	float coord_ponto[] = {ponto->x, ponto->y, ponto->w};
@@ -26,6 +49,14 @@ point *multiplicao_matriz(float matriz[3][3], point *ponto)
 	return new_point;
 }
 
+/*
+	Função auxiliar para o cálculo da área de um polígono, utilizada para o cálculo do centróide
+	- Parâmetros:
+		*poligono: Um ponteiro para um tipo object que representa o polígono que terá sua área calculada
+
+	- Valor de Retorno:
+		area: Um float que representa a área do polígono
+ */
 float Area(object *poligono)
 {
 	int num_points = poligono->numbers_of_points;
@@ -47,6 +78,15 @@ float Area(object *poligono)
 	return area;
 }
 
+
+/*
+	Função auxiliar para o cálculo das coordenadas do centróide de um polígono
+	- Parâmetros:
+		*poligono: Um ponteiro para um tipo object que representa o polígono que terá seu centróide calculado
+
+	- Valor de Retorno:
+		centroides: vetor de tipo float que contém as coordenadas x e y do centróide do polígono
+ */
 float *Centroide(object *poligono)
 {
 	float area = Area(poligono);
@@ -73,7 +113,15 @@ float *Centroide(object *poligono)
 	return centroides;
 }
 
-object *Rotacao(object *poligono, int angulo)
+/*
+	Função que realiza a rotação do poligono dado um ângulo (em radianos) qualquer
+	- Parâmetros:
+		*poligono: Um ponteiro para um tipo object que representa o polígono que será rotacionado
+
+	- Valor de Retorno:
+		poligono_rotacionado: polígono rotacionado em um determinado ângulo
+ */
+object *Rotacao(object *poligono, float angulo)
 {
 	int num_points = poligono->numbers_of_points;
 
@@ -84,7 +132,7 @@ object *Rotacao(object *poligono, int angulo)
 	point *p;
 	for (int i = 0; i < num_points; i++)
 	{
-		p = multiplicao_matriz(matriz_rotacao, &poligono->points[i]);
+		p = multiplicacao_matriz(matriz_rotacao, &poligono->points[i]);
 		SetObject(p, poligono_rotacionado);
 	}
 	return poligono_rotacionado;
@@ -134,23 +182,29 @@ int main(int argc, char **argv)
 	float dx = -centroides[0];
 	float dy = -centroides[1];
 	float matriz[3][3] = {{1, 0, dx},
-						  {0, 1, dy},
+						  {0, 1, dy},			// Matriz de Translação	em coordenadas homegêneas
 						  {0, 0, 1}};
 
 	float inversa[3][3] = {{1, 0, -dx},
-						   {0, 1, -dy},
+						   {0, 1, -dy},			// Matriz Inversa usada na operação de translação inversa
 						   {0, 0, 1}};
+	float angulo;
+
+	printf("Digite o angulo de rotacao do poligono (em graus): ");
+	scanf("%f", &angulo);
+
+	float angulo_rad = angulo * (PI / 180.0);	// Conversão do ângulo para radianos 
 
 	for (int i = 0; i < poligono1->numbers_of_points; i++)
 	{
-		SetObject(multiplicao_matriz(matriz, SetPoint(poligono1->points[i].x, poligono1->points[i].y, poligono1->points[i].w, 1)), poligono2);
+		SetObject(multiplicacao_matriz(matriz, SetPoint(poligono1->points[i].x, poligono1->points[i].y, poligono1->points[i].w, 1)), poligono2);
 	}
 
-	poligono3 = Rotacao(poligono2, 45);
+	poligono3 = Rotacao(poligono2, angulo_rad);
 
 	for (int i = 0; i < poligono1->numbers_of_points; i++)
 	{
-		SetObject(multiplicao_matriz(inversa, SetPoint(poligono3->points[i].x, poligono3->points[i].y, poligono3->points[i].w, 1)), poligono1T);
+		SetObject(multiplicacao_matriz(inversa, SetPoint(poligono3->points[i].x, poligono3->points[i].y, poligono3->points[i].w, 1)), poligono1T);
 	}
 
 	janela = CreateWindow(-12, -12, 6, 6); // cria uma janela de visualização (coordenadas no SRU)
