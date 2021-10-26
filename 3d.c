@@ -1,4 +1,4 @@
-#include "cg3d.h"
+#include "src/cg3d.h"
 
 // rode o script com:
 // chmod +777 ./rodar.sh
