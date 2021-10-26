@@ -1,8 +1,12 @@
 #include "src/cg3d.h"
 
-// rode o script com:
-// chmod +777 ./rodar.sh
-// ./rodar.sh
+/* Feito por:
+
+Lucas Vinícius Domingues 769699
+Rafael Yoshio Yamawaki Murata 769681
+Victor Luís Aguilar Antunes 769734
+
+*/
 
 int main(void)
 {
