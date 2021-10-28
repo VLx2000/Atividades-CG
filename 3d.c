@@ -9,7 +9,7 @@ Victor Luís Aguilar Antunes 769734
 #include <math.h>
 #define PI 3.14159265
 
-object3d *Rotacionar(matrix3d *matrizP, object3d *ob){
+object3d *Rotacionar(matrix3d *matrizP, object3d *ob){ //realiza a transformação linear de rotação
     
     object3d *nob = CreateObject3D(5);
     point3d *new_point = (point3d *)malloc(sizeof(point3d));
@@ -27,7 +27,7 @@ object3d *Rotacionar(matrix3d *matrizP, object3d *ob){
     return nob;
 }
 
-void setMatrix(int angulo, matrix3d *Px, matrix3d *Py, matrix3d *Pz){
+void setMatrizX(int angulo, matrix3d *Px){
 
     float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
 
@@ -42,6 +42,12 @@ void setMatrix(int angulo, matrix3d *Px, matrix3d *Py, matrix3d *Pz){
     Px->a32 = sin(q);
     Px->a33 = cos(q);
 
+}
+
+void setMatrizY(int angulo, matrix3d *Py){
+
+    float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
+
     // matriz rotação eixo y
     Py->a11 = cos(q);
     Py->a12 = 0;
@@ -52,6 +58,10 @@ void setMatrix(int angulo, matrix3d *Px, matrix3d *Py, matrix3d *Pz){
     Py->a31 = sin(q);
     Py->a32 = 0;
     Py->a33 = cos(q);
+}
+void setMatrizZ(int angulo, matrix3d *Pz){
+
+    float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
 
     // matriz rotação eixo z
     Pz->a11 = cos(q);
@@ -63,6 +73,36 @@ void setMatrix(int angulo, matrix3d *Px, matrix3d *Py, matrix3d *Pz){
     Pz->a31 = 0;
     Pz->a32 = 0;
     Pz->a33 = 1;
+}
+
+object3d* RotacionaX(int angulo, object3d *cob){
+    matrix3d * Px;
+    Px = (matrix3d *)malloc(sizeof(matrix3d));
+    setMatrizX(angulo,Px);
+    object3d *cob_new = ConvertObjectBase(Px, Rotacionar(Px, cob));              // prisma modificado no eixo x
+    return cob_new;
+}
+object3d* RotacionaY(int angulo, object3d *cob){
+    matrix3d * Py;
+    Py = (matrix3d *)malloc(sizeof(matrix3d));
+    setMatrizY(angulo,Py);
+    object3d *cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob));             //prisma modificado no eixo y
+    return  cob_new;
+}
+object3d* RotacionaZ(int angulo,object3d *cob){
+    matrix3d *Pz;
+    Pz = (matrix3d *)malloc(sizeof(matrix3d));
+    setMatrizZ(angulo,Pz);
+    object3d *cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob));    //prisma modificado no eixo z
+    return cob_new;  
+    
+}
+
+object3d* Rotaciona3Eixos(int angulo,object3d *cob){
+    object3d *cob_new = RotacionaX(angulo, cob);
+    cob_new = RotacionaY(angulo, cob_new);
+    cob_new = RotacionaZ(angulo, cob_new);                              //prisma modificado nos 3 eixos
+    return cob_new;
 }
 
 int main(void)
@@ -80,9 +120,8 @@ int main(void)
     viewport *porta;
 
     float zcp, zpp;
-
-    matrix3d *Px, *Py, *Pz;
     int angulo = 0;
+    char eixo;
 
     palheta = CreatePalette(6);
     SetColor(0, 0, 0, palheta);
@@ -229,37 +268,39 @@ int main(void)
     object3d *cob_x = cob;
     object3d *cob_y = cob;
     object3d *cob_z = cob;
-    object3d *cob_new = cob;
+    object3d *cob_new;
 
+    printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s): ");
+    scanf("%c",&eixo);
     printf("Digite em quantos graus o prisma sera rotacionado: ");
     scanf("%d", &angulo);
 
-    Px = (matrix3d *)malloc(sizeof(matrix3d));
-    Py = (matrix3d *)malloc(sizeof(matrix3d));
-    Pz = (matrix3d *)malloc(sizeof(matrix3d));
     
-    setMatrix(angulo, Px, Py, Pz);
+    switch(eixo){ //realiza rotação no eixo escolhido
+    case 'x':
+        cob_new = RotacionaX(angulo,cob);
+        break;
+    case 'y':
+        cob_new = RotacionaY(angulo,cob);
+        break;
+    case 'z':
+        cob_new = RotacionaZ(angulo,cob);
+        break;
+    case 's':
+        cob_new = Rotaciona3Eixos(angulo,cob);
+        break;
+    default:
+        cob_new = cob;
+        printf("Entrada Inválida! o eixo deve ser x, y, z ou s para rotação simultânea dos 3 eixos\n");
+    }
 
-    /* realizando rotacao */
-
-    cob_x = ConvertObjectBase(Px, Rotacionar(Px, cob));              // prisma modificado no eixo x
-
-    cob_y = ConvertObjectBase(Py, Rotacionar(Py, cob));              // prisma modificado no eixo y
-
-    cob_z = ConvertObjectBase(Pz, Rotacionar(Pz, cob));              // prisma modificado no eixo z
-
-    cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob_x));          // prisma modificado
-    cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob_new));        // nos 3 eixos
-
-    /**/
 
     //faces = ParalProjFaces(cob);
     zpp = 40.0;
     zcp = -45.0;
-    //faces = PerspProjFaces(cob_x, zpp, zcp);      // printar rotaçao eixo x
-    //faces = PerspProjFaces(cob_y, zpp, zcp);      // printar rotaçao eixo y
-    //faces = PerspProjFaces(cob_z, zpp, zcp);      // printar rotaçao eixo z
-    faces = PerspProjFaces(cob_new, zpp, zcp);      // printar rotaçao 3 eixos
+
+
+    faces = PerspProjFaces(cob_new, zpp, zcp);      // exibe rotação escolhida 
 
     janela = CreateWindow(-30, -30, 30, 30);
     dispositivo = CreateBuffer(640, 480);
