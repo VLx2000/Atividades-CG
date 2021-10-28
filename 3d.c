@@ -7,12 +7,31 @@ Victor Luís Aguilar Antunes 769734
 
 #include "src/cg3d.h"
 #include <math.h>
+#define PI 3.14159265
+
+object3d *Mover(matrix3d *matrizP, object3d *ob){
+    
+    object3d *nob = CreateObject3D(5);
+    point3d *new_point = (point3d *)malloc(sizeof(point3d));
+    
+    for (int i = 0; i < ob->numbers_of_faces; i++)
+    {
+        face *nf = CreateFace(ob->faces[i].numbers_of_points);
+        for (int j = 0; j < ob->faces[i].numbers_of_points; j++)
+        {
+            new_point = LinearTransf3d(matrizP, &ob->faces[i].points[j]);
+            SetPointFace(new_point, nf);
+        }
+        SetObject3D(nf, nob);
+    }
+    return nob;
+}
 
 int main(void)
 {
-    point3d *p, *new_point;
+    point3d *p;
     face *f1, *f2, *f3, *f4, *f5, *nf1, *nf2, *nf3, *nf4, *nf5;
-    object3d *ob, *cob, *nob;
+    object3d *ob, *cob;
     point3d *u, *v, *vu, *w;
     matrix3d *H;
     object *faces;
@@ -166,57 +185,66 @@ int main(void)
     H->a33 = w->z;
 
     cob = ConvertObjectBase(H, ob);      // prisma original
+    object3d *cob_x = cob;
+    object3d *cob_y = cob;
+    object3d *cob_z = cob;
+    object3d *cob_new = cob;
 
     /* tentando rotacao horizontal */
-
-    typedef struct MatrixRotacao {
-    float a11, a12, a13, a14,
-          a21, a22, a23, a24,
-          a31, a32, a33, a34,
-          a41, a42, a43, a44;
-    } matrixR;
     
-    matrixR *m1;
-    int dx = 0.3, dy = 0, dz = 0;
+    matrix3d *Px, *Py, *Pz;
+    int angulo = 0;
 
-    m1 = (matrixR *)malloc(sizeof(matrixR));
-    m1->a11 = u->x;
-    m1->a12 = u->y;
-    m1->a13 = u->z;
-    m1->a14 = -dx;
-    m1->a21 = v->x;
-    m1->a22 = v->y;
-    m1->a23 = v->z;
-    m1->a24 = -dy;
-    m1->a31 = w->x;
-    m1->a32 = w->y;
-    m1->a33 = w->z;
-    m1->a34 = -dz;
-    m1->a41 = 0;
-    m1->a42 = 0;
-    m1->a43 = 0;
-    m1->a44 = 1;
+    printf("Digite em quantos graus o prisma sera rotacionado: ");
+    scanf("%d", &angulo);
+    float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
 
-    new_point = (point3d *)malloc(sizeof(point3d));
+    Px = (matrix3d *)malloc(sizeof(matrix3d));
+    Py = (matrix3d *)malloc(sizeof(matrix3d));
+    Pz = (matrix3d *)malloc(sizeof(matrix3d));
 
-    nob = CreateObject3D(5);
-    for (int i = 0; i < ob->numbers_of_faces; i++)
-    {
-        face *nf = CreateFace(ob->faces[i].numbers_of_points);
-        for (int j = 0; j < ob->faces[i].numbers_of_points; j++)
-        {
-            new_point = LinearTransf3d(m1, &ob->faces[i].points[j]);
-            SetPointFace(new_point, nf);
-        }
-        SetObject3D(nf, nob);
-    }
-    cob = ConvertObjectBase(m1, nob);      // prisma modificado */
+    Px->a11 = 1;
+    Px->a12 = 0;
+    Px->a13 = 0;
+    Px->a21 = 0;
+    Px->a22 = cos(q);
+    Px->a23 = -sin(q);
+    Px->a31 = 0;
+    Px->a32 = sin(q);
+    Px->a33 = cos(q);
+
+    Py->a11 = cos(q);
+    Py->a12 = 0;
+    Py->a13 = -sin(q);
+    Py->a21 = 0;
+    Py->a22 = 1;
+    Py->a23 = 0;
+    Py->a31 = sin(q);
+    Py->a32 = 0;
+    Py->a33 = cos(q);
+
+    Pz->a11 = cos(q);
+    Pz->a12 = -sin(q);
+    Pz->a13 = 0;
+    Pz->a21 = sin(q);
+    Pz->a22 = cos(q);
+    Pz->a23 = 0;
+    Pz->a31 = 0;
+    Pz->a32 = 0;
+    Pz->a33 = 1;
+
+    cob_x = ConvertObjectBase(Px, Mover(Px, cob));              // prisma modificado no eixo x
+    cob_new = ConvertObjectBase(Px, Mover(Px, cob_x));
+    cob_y = ConvertObjectBase(Py, Mover(Py, cob));              // prisma modificado no eixo y
+    cob_new = ConvertObjectBase(Py, Mover(Py, cob_new));
+    cob_z = ConvertObjectBase(Pz, Mover(Pz, cob));              // prisma modificado no eixo z
+    cob_new = ConvertObjectBase(Pz, Mover(Pz, cob_new));        // prisma modificado nos 3 eixos */
     /**/
 
     //faces = ParalProjFaces(cob);
     zpp = 40.0;
     zcp = -45.0;
-    faces = PerspProjFaces(cob, zpp, zcp);
+    faces = PerspProjFaces(cob_new, zpp, zcp);
 
     janela = CreateWindow(-30, -30, 30, 30);
     dispositivo = CreateBuffer(640, 480);
