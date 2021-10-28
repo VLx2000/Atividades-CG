@@ -243,18 +243,23 @@ int main(void)
     /* realizando rotacao */
 
     cob_x = ConvertObjectBase(Px, Rotacionar(Px, cob));              // prisma modificado no eixo x
-    cob_new = ConvertObjectBase(Px, Rotacionar(Px, cob_x));
+
     cob_y = ConvertObjectBase(Py, Rotacionar(Py, cob));              // prisma modificado no eixo y
-    cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob_new));
+
     cob_z = ConvertObjectBase(Pz, Rotacionar(Pz, cob));              // prisma modificado no eixo z
-    cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob_new));        // prisma modificado nos 3 eixos
+
+    cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob_x));          // prisma modificado
+    cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob_new));        // nos 3 eixos
 
     /**/
 
     //faces = ParalProjFaces(cob);
     zpp = 40.0;
     zcp = -45.0;
-    faces = PerspProjFaces(cob_new, zpp, zcp);
+    //faces = PerspProjFaces(cob_x, zpp, zcp);      // printar rotaçao eixo x
+    //faces = PerspProjFaces(cob_y, zpp, zcp);      // printar rotaçao eixo y
+    //faces = PerspProjFaces(cob_z, zpp, zcp);      // printar rotaçao eixo z
+    faces = PerspProjFaces(cob_new, zpp, zcp);      // printar rotaçao 3 eixos
 
     janela = CreateWindow(-30, -30, 30, 30);
     dispositivo = CreateBuffer(640, 480);
