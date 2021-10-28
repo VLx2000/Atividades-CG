@@ -9,7 +9,7 @@ Victor Luís Aguilar Antunes 769734
 #include <math.h>
 #define PI 3.14159265
 
-object3d *Mover(matrix3d *matrizP, object3d *ob){
+object3d *Rotacionar(matrix3d *matrizP, object3d *ob){
     
     object3d *nob = CreateObject3D(5);
     point3d *new_point = (point3d *)malloc(sizeof(point3d));
@@ -27,6 +27,44 @@ object3d *Mover(matrix3d *matrizP, object3d *ob){
     return nob;
 }
 
+void setMatrix(int angulo, matrix3d *Px, matrix3d *Py, matrix3d *Pz){
+
+    float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
+
+    // matriz rotação eixo x
+    Px->a11 = 1;
+    Px->a12 = 0;
+    Px->a13 = 0;
+    Px->a21 = 0;
+    Px->a22 = cos(q);
+    Px->a23 = -sin(q);
+    Px->a31 = 0;
+    Px->a32 = sin(q);
+    Px->a33 = cos(q);
+
+    // matriz rotação eixo y
+    Py->a11 = cos(q);
+    Py->a12 = 0;
+    Py->a13 = -sin(q);
+    Py->a21 = 0;
+    Py->a22 = 1;
+    Py->a23 = 0;
+    Py->a31 = sin(q);
+    Py->a32 = 0;
+    Py->a33 = cos(q);
+
+    // matriz rotação eixo z
+    Pz->a11 = cos(q);
+    Pz->a12 = -sin(q);
+    Pz->a13 = 0;
+    Pz->a21 = sin(q);
+    Pz->a22 = cos(q);
+    Pz->a23 = 0;
+    Pz->a31 = 0;
+    Pz->a32 = 0;
+    Pz->a33 = 1;
+}
+
 int main(void)
 {
     point3d *p;
@@ -42,6 +80,9 @@ int main(void)
     viewport *porta;
 
     float zcp, zpp;
+
+    matrix3d *Px, *Py, *Pz;
+    int angulo = 0;
 
     palheta = CreatePalette(6);
     SetColor(0, 0, 0, palheta);
@@ -190,55 +231,24 @@ int main(void)
     object3d *cob_z = cob;
     object3d *cob_new = cob;
 
-    /* tentando rotacao horizontal */
-    
-    matrix3d *Px, *Py, *Pz;
-    int angulo = 0;
-
     printf("Digite em quantos graus o prisma sera rotacionado: ");
     scanf("%d", &angulo);
-    float q = angulo * (PI / 180.0);	// Conversão do ângulo para radianos
 
     Px = (matrix3d *)malloc(sizeof(matrix3d));
     Py = (matrix3d *)malloc(sizeof(matrix3d));
     Pz = (matrix3d *)malloc(sizeof(matrix3d));
+    
+    setMatrix(angulo, Px, Py, Pz);
 
-    Px->a11 = 1;
-    Px->a12 = 0;
-    Px->a13 = 0;
-    Px->a21 = 0;
-    Px->a22 = cos(q);
-    Px->a23 = -sin(q);
-    Px->a31 = 0;
-    Px->a32 = sin(q);
-    Px->a33 = cos(q);
+    /* realizando rotacao */
 
-    Py->a11 = cos(q);
-    Py->a12 = 0;
-    Py->a13 = -sin(q);
-    Py->a21 = 0;
-    Py->a22 = 1;
-    Py->a23 = 0;
-    Py->a31 = sin(q);
-    Py->a32 = 0;
-    Py->a33 = cos(q);
+    cob_x = ConvertObjectBase(Px, Rotacionar(Px, cob));              // prisma modificado no eixo x
+    cob_new = ConvertObjectBase(Px, Rotacionar(Px, cob_x));
+    cob_y = ConvertObjectBase(Py, Rotacionar(Py, cob));              // prisma modificado no eixo y
+    cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob_new));
+    cob_z = ConvertObjectBase(Pz, Rotacionar(Pz, cob));              // prisma modificado no eixo z
+    cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob_new));        // prisma modificado nos 3 eixos
 
-    Pz->a11 = cos(q);
-    Pz->a12 = -sin(q);
-    Pz->a13 = 0;
-    Pz->a21 = sin(q);
-    Pz->a22 = cos(q);
-    Pz->a23 = 0;
-    Pz->a31 = 0;
-    Pz->a32 = 0;
-    Pz->a33 = 1;
-
-    cob_x = ConvertObjectBase(Px, Mover(Px, cob));              // prisma modificado no eixo x
-    cob_new = ConvertObjectBase(Px, Mover(Px, cob_x));
-    cob_y = ConvertObjectBase(Py, Mover(Py, cob));              // prisma modificado no eixo y
-    cob_new = ConvertObjectBase(Py, Mover(Py, cob_new));
-    cob_z = ConvertObjectBase(Pz, Mover(Pz, cob));              // prisma modificado no eixo z
-    cob_new = ConvertObjectBase(Pz, Mover(Pz, cob_new));        // prisma modificado nos 3 eixos */
     /**/
 
     //faces = ParalProjFaces(cob);
