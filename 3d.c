@@ -118,9 +118,6 @@ object3d *Rotaciona3Eixos(object3d *cob)
     P = MultiplicaM3d(Px, MultiplicaM3d(Py, Pz));
 
     object3d *cob_new = ConvertObjectBase(P, Rotacionar(P, cob)); //prisma modificado nos 3 eixos
-    /*cob_new = RotacionaX(angulo, cob);
-    cob_new = RotacionaY(angulo, cob_new);
-    cob_new = RotacionaZ(angulo, cob_new);*/
     return cob_new;
 }
 
@@ -283,46 +280,6 @@ int main(void)
     H->a32 = w->y;
     H->a33 = w->z;
 
-
-
-    //matrizes de teste
-    /*
-    matrix3d *P = (matrix3d *)malloc(sizeof(matrix3d));
-    // matriz rotação eixo z
-    P->a11 = 1;
-    P->a12 = -2;
-    P->a13 = 1;
-    P->a21 = 5;
-    P->a22 = 5;
-    P->a23 = 1;
-    P->a31 = -5;
-    P->a32 = -1;
-    P->a33 = -5;
-
-    matrix3d *Q = (matrix3d *)malloc(sizeof(matrix3d));
-    // matriz rotação eixo z
-    Q->a11 = -5;
-    Q->a12 = 0;
-    Q->a13 = 1;
-    Q->a21 = 5;
-    Q->a22 = 5;
-    Q->a23 = -1;
-    Q->a31 = 2;
-    Q->a32 = 5;
-    Q->a33 = 5;
-
-    matrix3d *PQ = (matrix3d *)malloc(sizeof(matrix3d));
-    PQ = MultiplicaM3d(P, Q);
-    printf("%f ", PQ->a11);
-    printf("%f ", PQ->a12);
-    printf("%f\n", PQ->a13);
-    printf("%f ", PQ->a21);
-    printf("%f ", PQ->a22);
-    printf("%f\n", PQ->a23);
-    printf("%f ", PQ->a31);
-    printf("%f ", PQ->a32);
-    printf("%f\n", PQ->a33);
-*/
     printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s): ");
     scanf("%c", &eixo);
     printf("Digite em quantos graus o prisma sera rotacionado: ");
