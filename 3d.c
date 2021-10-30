@@ -283,11 +283,7 @@ int main(void)
     H->a32 = w->y;
     H->a33 = w->z;
 
-    cob = ConvertObjectBase(H, ob); // prisma original
-    object3d *cob_x = cob;
-    object3d *cob_y = cob;
-    object3d *cob_z = cob;
-    object3d *cob_new;
+
 
     //matrizes de teste
     /*
@@ -334,36 +330,44 @@ int main(void)
 
     float q = angulo * (PI / (180.0 * 2)); // Conversão do ângulo para radianos
 
+    object3d *cob_x = cob;
+    object3d *cob_y = cob;
+    object3d *cob_z = cob;
+    object3d *ob_new;
+
     switch (eixo)
     { //realiza rotação no eixo escolhido
     case 'x':
         setMatrizX(q);
-        cob_new = RotacionaX(Px, cob);
+        ob_new = RotacionaX(Px, ob);
         break;
     case 'y':
         setMatrizY(q);
-        cob_new = RotacionaY(Py, cob);
+        ob_new = RotacionaY(Py, ob);
         break;
     case 'z':
         setMatrizZ(q);
-        cob_new = RotacionaZ(Pz, cob);
+        ob_new = RotacionaZ(Pz, ob);
         break;
     case 's':
         setMatrizX(q);
         setMatrizY(q);
         setMatrizZ(q);
-        cob_new = Rotaciona3Eixos(cob);
+        ob_new = Rotaciona3Eixos(ob);
         break;
     default:
-        cob_new = cob;
+        ob_new = cob;
         printf("Entrada Inválida! o eixo deve ser x, y, z ou s para rotação simultânea dos 3 eixos\n");
     }
 
     //faces = ParalProjFaces(cob);
+    cob = ConvertObjectBase(H, ob_new); // prisma original
+
+
     zpp = 40.0;
     zcp = -45.0;
 
-    faces = PerspProjFaces(cob_new, zpp, zcp); // exibe rotação escolhida
+    faces = PerspProjFaces(cob, zpp, zcp); // exibe rotação escolhida
 
     janela = CreateWindow(-30, -30, 30, 30);
     dispositivo = CreateBuffer(640, 480);
