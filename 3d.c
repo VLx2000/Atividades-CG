@@ -280,16 +280,13 @@ int main(void)
     H->a32 = w->y;
     H->a33 = w->z;
 
-    printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s): ");
+    printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s)): ");
     scanf("%c", &eixo);
     printf("Digite em quantos graus o prisma sera rotacionado: ");
     scanf("%d", &angulo);
 
     float q = angulo * (PI / (180.0 * 2)); // Conversão do ângulo para radianos
 
-    object3d *cob_x = cob;
-    object3d *cob_y = cob;
-    object3d *cob_z = cob;
     object3d *ob_new;
 
     switch (eixo)
@@ -318,8 +315,7 @@ int main(void)
     }
 
     //faces = ParalProjFaces(cob);
-    cob = ConvertObjectBase(H, ob_new); // prisma original
-
+    cob = ConvertObjectBase(H, ob_new);
 
     zpp = 40.0;
     zcp = -45.0;
