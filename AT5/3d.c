@@ -30,7 +30,7 @@ object3d *Rotacionar(matrix3d *matrizP, object3d *ob)
     return nob;
 }
 
-void setMatrizX(float q)
+void setMatrizes(float q)
 {
     Px = (matrix3d *)malloc(sizeof(matrix3d));
     // matriz rotação eixo x
@@ -43,10 +43,7 @@ void setMatrizX(float q)
     Px->a31 = 0;
     Px->a32 = sin(q);
     Px->a33 = cos(q);
-}
 
-void setMatrizY(float q)
-{
     Py = (matrix3d *)malloc(sizeof(matrix3d));
     // matriz rotação eixo y
     Py->a11 = cos(q);
@@ -58,10 +55,7 @@ void setMatrizY(float q)
     Py->a31 = sin(q);
     Py->a32 = 0;
     Py->a33 = cos(q);
-}
 
-void setMatrizZ(float q)
-{
     Pz = (matrix3d *)malloc(sizeof(matrix3d));
     // matriz rotação eixo z
     Pz->a11 = cos(q);
@@ -75,19 +69,19 @@ void setMatrizZ(float q)
     Pz->a33 = 1;
 }
 
-object3d *RotacionaX(matrix3d *Px, object3d *cob)
+object3d *RotacionaX(object3d *cob)
 {
     object3d *cob_new = ConvertObjectBase(Px, Rotacionar(Px, cob)); // prisma modificado no eixo x
     return cob_new;
 }
 
-object3d *RotacionaY(matrix3d *Py, object3d *cob)
+object3d *RotacionaY(object3d *cob)
 {
     object3d *cob_new = ConvertObjectBase(Py, Rotacionar(Py, cob)); //prisma modificado no eixo y
     return cob_new;
 }
 
-object3d *RotacionaZ(matrix3d *Pz, object3d *cob)
+object3d *RotacionaZ(object3d *cob)
 {
     object3d *cob_new = ConvertObjectBase(Pz, Rotacionar(Pz, cob)); //prisma modificado no eixo z
     return cob_new;
@@ -288,25 +282,20 @@ int main(void)
     float q = angulo * (PI / (180.0 * 2)); // Conversão do ângulo para radianos
 
     object3d *ob_new;
+    setMatrizes(q);
 
     switch (eixo)
     { //realiza rotação no eixo escolhido
     case 'x':
-        setMatrizX(q);
-        ob_new = RotacionaX(Px, ob);
+        ob_new = RotacionaX(ob);
         break;
     case 'y':
-        setMatrizY(q);
-        ob_new = RotacionaY(Py, ob);
+        ob_new = RotacionaY(ob);
         break;
     case 'z':
-        setMatrizZ(q);
-        ob_new = RotacionaZ(Pz, ob);
+        ob_new = RotacionaZ(ob);
         break;
     case 's':
-        setMatrizX(q);
-        setMatrizY(q);
-        setMatrizZ(q);
         ob_new = Rotaciona3Eixos(ob);
         break;
     default:
