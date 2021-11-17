@@ -1,0 +1,27 @@
+Quarta atividade avaliativa
+
+Atividade para ser desenvolvida em grupos de no máximo 4 alunos.
+
+Data para entrega: 29/10 até às 23h59.
+
+Com base no código disponibilizado no Moodle em que esboçamos algumas rotinas básicas para a visualização de objetos tridimensionais, faça:
+
+a) implemente três rotinas para a rotação de um objeto em relação ao eixo x, y e z, respectivamente. Teste o código e apresente resultados considerando
+ diferentes ângulos para as três direções. Dica: use o prisma de base triangular explorado no exemplo;
+
+b) implemente uma rotina para uma rotação simultânea nas três direções. Os parâmetros desta função devem ser o objeto a ser rotacionado e
+ uma única matriz de rotação;
+
+c) responda as seguintes questões apresentando suas respostas em um arquivo texto:
+
+    c.1) Existe algum efeito colateral que decorre das operações simultâneas efetuadas nos códigos desenvolvidos para os itens acima? Justifique sua resposta.
+    c.2) O que podemos esperar se o objeto utilizado no exemplo for deslocado em qualquer direção antes das operações de rotação? Justifique.
+    c.3) Descreva as vantagens de realizar uma rotação como uma transformação linear.
+    c.4) Existe uma ordem para executarmos as operações de rotação? Isto é, se realizarmos uma rotação em torno de x e posteriormente em
+     torno do eixo z, o resultado esperado é o mesmo se primeiro rotacionarmos o objeto em z e depois em x? Justifique sua resposta.
+    c.5) Descreva em que momento do pipeline de visualização devem ser realizadas as operações de rotação e qual o sistema de
+     referência utilizado. Justifique.
+
+Por favor, compacte todos os arquivos da tarefa em um único, utilizando um compactador de sua preferência. Não envie executáveis.
+O nome do arquivo a ser enviado deve ser "numero_seu_ra.zip". A extensão do arquivo pode variar. Se houver mais de um aluno, isto é, 
+a atividade foi realizada em grupo, apenas um aluno deve subir o arquivo. A identificação dos demais (nomes e RAs) deve constar na documentação.
