@@ -1,0 +1,16 @@
+Data para entrega: 19/11 até às 23h59.
+
+Com base nos códigos disponibilizados no Moodle, assim como nos códigos desenvolvidos nas atividades anteriores, 
+implemente uma função para o preenchimento das faces de um objeto tridimensional.
+
+A cor de preenchimento e a face a ser pintada devem ser passadas como parâmetros da função. A implementação deverá ser baseada no algoritmo de varredura.
+
+Observação: para simplificação, pode-se utilizar as coordenadas dos pontos do prisma de base triangular da atividade anterior.
+
+Apresente resultados considerando rotações em torno dos eixos para ilustrar o preenchimento de pelo menos 3 faces.
+
+Compacte todos os arquivos da tarefa em um único, utilizando um compactador de sua preferência. 
+Não envie executáveis. 
+O nome do arquivo a ser enviado deve ser "numero_seu_ra.zip". A extensão do arquivo pode variar. 
+Se houver mais de um aluno, isto é, a atividade foi realizada em grupo, apenas um aluno deve subir o arquivo. 
+A identificação dos demais (nomes e RAs) deve constar na documentação.
