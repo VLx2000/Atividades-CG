@@ -17,3 +17,5 @@ Conteúdo:
 - AT4: [Rotação 3D](https://downgit.github.io/#/home?url=https://github.com/VLx2000/Atividades-CG/tree/main/AT4)
 - AT5: [Preenchimento de faces](https://downgit.github.io/#/home?url=https://github.com/VLx2000/Atividades-CG/tree/main/AT5)
 - AT6:
+
+###### Parte dos códigos foi sedida pelo professor Murillo Rodrigo Petrucelli Homem ######
