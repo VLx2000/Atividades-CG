@@ -10,6 +10,25 @@ Victor Luís Aguilar Antunes 769734
 #define PI 3.14159265
 
 matrix3d *Px, *Py, *Pz;
+void RasterFill(bufferdevice *dev, viewport *port, int color);
+
+void colorir(object *faces, window *janela, viewport *porta, bufferdevice *dispositivo, int cor, int face)
+{
+    DrawObject(&faces[face - 1], janela, porta, dispositivo, cor);
+    RasterFill(dispositivo, porta, cor);
+
+    int selecionados = 0, vetor_n[4] = {0, 0, 0, face - 1};
+    while (selecionados < 3)
+    {
+        int n = (rand() % 4) + 1;
+        if (n != vetor_n[0] && n != vetor_n[1] && n != vetor_n[2] && n != vetor_n[3])
+        {
+            DrawObject(&faces[n], janela, porta, dispositivo, cor);
+            vetor_n[selecionados] = n;
+            selecionados++;
+        }
+    }
+}
 
 void RasterFill(bufferdevice *dev, viewport *port, int color)
 {
@@ -187,7 +206,7 @@ int main(void)
 
     p = (point3d *)malloc(sizeof(point3d));
 
-    int cor = 1, poligono = 1;
+    int cor = 1;
     printf("Digite qual a cor desejada (1 = branco, 2 = amarelo, 3 = magenta, 4 = ciano, 5 = vermelho, 6 = verde, 7 = azul): ");
     scanf("%d", &cor);
 
@@ -322,7 +341,7 @@ int main(void)
     H->a32 = w->y;
     H->a33 = w->z;
 
-    int angulo = 25;
+    int angulo = 120;
     char eixo = 's';
 
 /*
@@ -367,27 +386,17 @@ int main(void)
     dispositivo = CreateBuffer(640, 480);
     porta = CreateViewPort(0, 0, 639, 479);
 
-    printf("Digite qual o numero do poligono a ser colorido: (numero entre 1 e 4): ");
-    scanf("%d", &poligono);
-    while (poligono > 4 || poligono < 1)
+    int  face = 1;
+
+    printf("Digite qual o numero da face a ser colorida: (numero entre 1 e 4): ");
+    scanf("%d", &face);
+    while (face > 4 || face < 1)
     {
         printf("Digite um numero entre 1 e 4!\n");
-        scanf("%d", &poligono);
+        scanf("%d", &face);
     }
-    DrawObject(&faces[poligono - 1], janela, porta, dispositivo, cor);
-    RasterFill(dispositivo, porta, cor);
+    colorir(faces, janela, porta, dispositivo, cor, face);
 
-    int selecionados = 0, vetor_n[4] = {0, 0, 0, poligono - 1};
-    while (selecionados < 3)
-    {
-        int n = (rand() % 4) + 1;
-        if (n != vetor_n[0] && n != vetor_n[1] && n != vetor_n[2] && n != vetor_n[3])
-        {
-            DrawObject(&faces[n], janela, porta, dispositivo, cor);
-            vetor_n[selecionados] = n;
-            selecionados++;
-        }
-    }
     Dump2X(dispositivo, palheta);
 
     return 0;
