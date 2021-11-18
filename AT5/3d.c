@@ -187,13 +187,10 @@ int main(void)
 
     p = (point3d *)malloc(sizeof(point3d));
 
-    int cor = 1, poligono;
+    int cor = 1, poligono = 1;
     printf("Digite qual a cor desejada (1 = branco, 2 = amarelo, 3 = magenta, 4 = ciano, 5 = vermelho, 6 = verde, 7 = azul): ");
     scanf("%d", &cor);
-/*
-    printf("Digite qual o numero do poligono a ser colorido: ");
-    scanf("%d", &poligono);
-*/
+
     f1 = CreateFace(3);
     p->x = 10.0;
     p->y = 10.0;
@@ -370,17 +367,27 @@ int main(void)
     dispositivo = CreateBuffer(640, 480);
     porta = CreateViewPort(0, 0, 639, 479);
 
-    DrawObject(&faces[0], janela, porta, dispositivo, cor);
+    printf("Digite qual o numero do poligono a ser colorido: (numero entre 1 e 4): ");
+    scanf("%d", &poligono);
+    while (poligono > 4 || poligono < 1)
+    {
+        printf("Digite um numero entre 1 e 4!\n");
+        scanf("%d", &poligono);
+    }
+    DrawObject(&faces[poligono - 1], janela, porta, dispositivo, cor);
     RasterFill(dispositivo, porta, cor);
-    DrawObject(&faces[1], janela, porta, dispositivo, cor);
-    //RasterFill(dispositivo, porta, cor);
-    DrawObject(&faces[2], janela, porta, dispositivo, cor);
-    //RasterFill(dispositivo, porta, cor);
-    DrawObject(&faces[3], janela, porta, dispositivo, cor);
-    //RasterFill(dispositivo, porta, cor);
-    DrawObject(&faces[4], janela, porta, dispositivo, cor);
-    //RasterFill(dispositivo, porta, cor);
 
+    int selecionados = 0, vetor_n[4] = {0, 0, 0, poligono - 1};
+    while (selecionados < 3)
+    {
+        int n = (rand() % 4) + 1;
+        if (n != vetor_n[0] && n != vetor_n[1] && n != vetor_n[2] && n != vetor_n[3])
+        {
+            DrawObject(&faces[n], janela, porta, dispositivo, cor);
+            vetor_n[selecionados] = n;
+            selecionados++;
+        }
+    }
     Dump2X(dispositivo, palheta);
 
     return 0;
