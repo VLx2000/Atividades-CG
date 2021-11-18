@@ -11,6 +11,50 @@ Victor Luís Aguilar Antunes 769734
 
 matrix3d *Px, *Py, *Pz;
 
+void RasterFill(bufferdevice *dev, viewport *port, int color)
+{
+    int cont = 0;
+    for (int y = port->ymax; y >= port->ymin; y--)
+    {
+        int n_pontos_linha = 0;
+        int pos_x[10]; // vetor com as extremidades da linha do polígono
+
+        // Busca por pixels de determinada cor em uma linha
+        for (int x = port->xmin; x <= port->xmax; x++)
+        {
+            int pxl = dev->buffer[cont]; //verificando a cor do pixel
+
+            if (pxl == color && y != port->ymax && y != port->ymin && x != port->xmin && x != port->xmax)
+            {
+                pos_x[n_pontos_linha] = cont; // seleciona os pixels coloridos do polígono
+
+                if (pos_x[n_pontos_linha] - pos_x[n_pontos_linha - 1] <= 1 && n_pontos_linha - 1 >= 0)
+                {
+                    n_pontos_linha--;
+                    pos_x[n_pontos_linha] = cont;
+                }
+                n_pontos_linha++;
+            }
+            cont++;
+        }
+
+        // Preenchendo linha do polígono
+        if (n_pontos_linha >= 2)
+        {
+            int size = sizeof pos_x / sizeof pos_x[0];
+            int index = 0;
+
+            for (int i = pos_x[index]; i < pos_x[index + 1] && index + 1 < size; i++)
+            {
+                if (dev->buffer[i] != color)
+                {
+                    dev->buffer[i] = color;
+                }
+            }
+        }
+    }
+}
+
 object3d *Rotacionar(matrix3d *matrizP, object3d *ob)
 {
     //realiza a transformação linear de rotação
@@ -130,117 +174,124 @@ int main(void)
     viewport *porta;
 
     float zcp, zpp;
-    int angulo = 0;
-    char eixo;
 
-    palheta = CreatePalette(6);
-    SetColor(0, 0, 0, palheta);
-    SetColor(1, 1, 1, palheta);
-    SetColor(1, 1, 0, palheta);
-    SetColor(1, 0, 0, palheta);
-    SetColor(0, 1, 0, palheta);
-    SetColor(0, 0, 1, palheta);
+    palheta = CreatePalette(8);
+    SetColor(0, 0, 0, palheta); // preto
+    SetColor(1, 1, 1, palheta); // branco
+    SetColor(1, 1, 0, palheta); // amarelo
+    SetColor(1, 0, 1, palheta); // magenta
+    SetColor(0, 1, 1, palheta); // ciano
+    SetColor(1, 0, 0, palheta); // vermelho
+    SetColor(0, 1, 0, palheta); // verde
+    SetColor(0, 0, 1, palheta); // azul
 
     p = (point3d *)malloc(sizeof(point3d));
 
+    int cor = 1, poligono;
+    printf("Digite qual a cor desejada (1 = branco, 2 = amarelo, 3 = magenta, 4 = ciano, 5 = vermelho, 6 = verde, 7 = azul): ");
+    scanf("%d", &cor);
+/*
+    printf("Digite qual o numero do poligono a ser colorido: ");
+    scanf("%d", &poligono);
+*/
     f1 = CreateFace(3);
     p->x = 10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 1;
+    p->color = cor;
     SetPointFace(p, f1);
     p->x = 10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 1;
+    p->color = cor;
     SetPointFace(p, f1);
     p->x = 10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 1;
+    p->color = cor;
     SetPointFace(p, f1);
 
     f2 = CreateFace(3);
     p->x = -10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 2;
+    p->color = cor;
     SetPointFace(p, f2);
     p->x = -10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 2;
+    p->color = cor;
     SetPointFace(p, f2);
     p->x = -10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 2;
+    p->color = cor;
     SetPointFace(p, f2);
 
     f3 = CreateFace(4);
     p->x = 10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 3;
+    p->color = cor;
     SetPointFace(p, f3);
     p->x = 10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 3;
+    p->color = cor;
     SetPointFace(p, f3);
     p->x = -10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 3;
+    p->color = cor;
     SetPointFace(p, f3);
     p->x = -10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 3;
+    p->color = cor;
     SetPointFace(p, f3);
 
     f4 = CreateFace(4);
     p->x = 10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 4;
+    p->color = cor;
     SetPointFace(p, f4);
     p->x = 10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 4;
+    p->color = cor;
     SetPointFace(p, f4);
     p->x = -10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 4;
+    p->color = cor;
     SetPointFace(p, f4);
     p->x = -10.0;
     p->y = 0.0;
     p->z = 15.0;
-    p->color = 4;
+    p->color = cor;
     SetPointFace(p, f4);
 
     f5 = CreateFace(4);
     p->x = 10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 5;
+    p->color = cor;
     SetPointFace(p, f5);
     p->x = 10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 5;
+    p->color = cor;
     SetPointFace(p, f5);
     p->x = -10.0;
     p->y = -10.0;
     p->z = 0.0;
-    p->color = 5;
+    p->color = cor;
     SetPointFace(p, f5);
     p->x = -10.0;
     p->y = 10.0;
     p->z = 0.0;
-    p->color = 5;
+    p->color = cor;
     SetPointFace(p, f5);
 
     ob = CreateObject3D(5);
@@ -274,11 +325,15 @@ int main(void)
     H->a32 = w->y;
     H->a33 = w->z;
 
+    int angulo = 25;
+    char eixo = 's';
+
+/*
     printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s)): ");
     scanf("%c", &eixo);
     printf("Digite em quantos graus o prisma sera rotacionado: ");
     scanf("%d", &angulo);
-
+*/
     float q = angulo * (PI / (180.0 * 2)); // Conversão do ângulo para radianos
 
     object3d *ob_new;
@@ -299,7 +354,7 @@ int main(void)
         ob_new = Rotaciona3Eixos(ob);
         break;
     default:
-        ob_new = cob;
+        ob_new = ob;
         printf("Entrada Inválida! o eixo deve ser x, y, z ou s para rotação simultânea dos 3 eixos\n");
     }
 
@@ -315,11 +370,16 @@ int main(void)
     dispositivo = CreateBuffer(640, 480);
     porta = CreateViewPort(0, 0, 639, 479);
 
-    DrawObject(&faces[0], janela, porta, dispositivo, 3);
-    DrawObject(&faces[1], janela, porta, dispositivo, 3);
-    DrawObject(&faces[2], janela, porta, dispositivo, 3);
-    DrawObject(&faces[3], janela, porta, dispositivo, 3);
-    DrawObject(&faces[4], janela, porta, dispositivo, 3);
+    DrawObject(&faces[0], janela, porta, dispositivo, cor);
+    RasterFill(dispositivo, porta, cor);
+    DrawObject(&faces[1], janela, porta, dispositivo, cor);
+    //RasterFill(dispositivo, porta, cor);
+    DrawObject(&faces[2], janela, porta, dispositivo, cor);
+    //RasterFill(dispositivo, porta, cor);
+    DrawObject(&faces[3], janela, porta, dispositivo, cor);
+    //RasterFill(dispositivo, porta, cor);
+    DrawObject(&faces[4], janela, porta, dispositivo, cor);
+    //RasterFill(dispositivo, porta, cor);
 
     Dump2X(dispositivo, palheta);
 
