@@ -344,12 +344,12 @@ int main(void)
     int angulo = 120;
     char eixo = 's';
 
-/*
+
     printf("Digite em qual eixo o prisma será rotacionado(x,y,z ou rotação simultânea dos 3 eixos(digite s)): ");
-    scanf("%c", &eixo);
+    scanf("%*c%c%*c", &eixo);
     printf("Digite em quantos graus o prisma sera rotacionado: ");
-    scanf("%d", &angulo);
-*/
+    scanf("%d%*c", &angulo);
+
     float q = angulo * (PI / (180.0 * 2)); // Conversão do ângulo para radianos
 
     object3d *ob_new;
